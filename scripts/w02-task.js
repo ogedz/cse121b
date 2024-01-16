@@ -29,10 +29,20 @@ let favoriteFoods = [
   "Egusi soup with goat meat",
 ];
 
-const newFavoriteFood = "Semo with Egusi soup cooked with goat meat";
+const newFavoriteFood = "Jollof rice and chicken";
 
 // my original set of favorite foods
 foodElement.innerHTML += '<h3>My set of favorite foods:</h3>';
+foodElement.innerHTML += favoriteFoods.map(food => `<p>${food}</p>`).join('');
+
+// space
+foodElement.innerHTML += '<br><br>';
+
+// Add a new favorite food 
+favoriteFoods.push("Jollof rice and chicken");
+
+// Display the set after adding a new element
+foodElement.innerHTML += '<h3>My set of favorite foods after adding another food</h3>';
 foodElement.innerHTML += favoriteFoods.map(food => `<p>${food}</p>`).join('');
 
 // space
@@ -42,7 +52,7 @@ foodElement.innerHTML += '<br><br>';
 favoriteFoods.shift();
 
 // the set after the first food has been removed
-foodElement.innerHTML += '<h3>My set of favorite food after removing first food:</h3>';
+foodElement.innerHTML += '<h3>My set of favorite foods after removing first food:</h3>';
 foodElement.innerHTML += favoriteFoods.map(food => `<p>${food}</p>`).join('');
 
 // space 
@@ -52,5 +62,5 @@ foodElement.innerHTML += '<br><br>';
 favoriteFoods.pop();
 
 // the set after the first last has been removed
-foodElement.innerHTML += '<h3>Set After Removing Last Element:</h3>';
+foodElement.innerHTML += '<h3>My set of favorite foods after removing last food:</h3>';
 foodElement.innerHTML += favoriteFoods.map(food => `<p>${food}</p>`).join('');
