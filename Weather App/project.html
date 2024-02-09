@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecast App</title>
+    <link rel="stylesheet" href="weather.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Weather Forecast</h1>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <div id="slideshow-container" class="slideshow-container">
+                <div class="slide fade">
+                    <img src="images/OIG1.jpg" alt="Scenic Image 1">
+                    <div class="overlay"></div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/OIG4(2).jpg" alt="Scenic Image 2">
+                    <div class="overlay"></div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/OIG2.jpg" alt="Scenic Image 3">
+                    <div class="overlay"></div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/OIG4.jpg" alt="Scenic Image 4">
+                    <div class="overlay"></div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/OIG2.sAasiq89hABWypybgD.jpg" alt="Scenic Image 5">
+                    <div class="overlay"></div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/OIG3.b.jpg" alt="Scenic Image 6">
+                    <div class="overlay"></div>
+                </div>
+                <div class="slide fade">
+                    <img src="images/OIG3.jpg" alt="Scenic Image 7">
+                    <div class="overlay"></div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <form id="locationForm">
+                <label for="location">Enter Location:</label>
+                <input type="text" id="location" placeholder="City name" required>
+                <label for="date">Select Date:</label>
+                <input type="date" id="date" required>
+                <button type="submit"><i class="fas fa-search"></i> Get Weather</button>
+            </form>
+            <div id="weather-info" aria-live="polite">
+                <!-- Weather information will be displayed here -->
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 | Ogedengbe | Weather Forecast App | All Right Reserved </p>
+            <div class="social">
+                <a href="https://facebook.com/ogedz" target="_blank">
+                    <img src="images/fb.jpg" alt="fb icon">
+                </a>
+                <a href="https://linkedin.com/in/maccabaeus-ogedengbe/" target="_blank">
+                    <img src="images/linkedin.png" alt="linkedin icon">
+                </a>
+                <a href="https://wa.me/+2348033638719" target="_blank">
+                    <img src="images/whatsapp.webp" alt="whatsapp icon">
+                </a>
+            </div>
+        </div>
+    </footer>
+    <script src="weather.js"></script>
+</body>
+</html>

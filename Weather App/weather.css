@@ -1,0 +1,222 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #b7c5c9;
+    color: #333;
+}
+
+/* Header styles */
+header {
+    background-color: #111213;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Footer styles */
+footer {
+    background-color: #0e0f0f;
+    color: #fff;
+    padding: 15px 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    align-items: center;
+    left: 0;
+}
+
+.footer p {
+    margin-bottom: 5px;
+}
+
+.social img {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+}
+  
+/* Container styles */
+.container {
+    max-width: 1200px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+
+#locationForm {
+    text-align: center;
+}
+
+#locationForm button {
+    background-color: green;
+    padding: 10px;
+    color: gold;
+}
+
+#locationForm input {
+    padding: 20px;
+    font-size: small;
+    align-items: row;
+
+}
+
+.input-group {
+    display: inline-block;
+    text-align: left; 
+}
+
+/* Main styles */
+main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 0;
+}
+
+/* Slideshow container styles */
+.slideshow-container {
+    width: 60%;
+    position: relative;
+}
+
+.slide {
+    display: none;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+/* Weather information container styles */
+#weather-info {
+    width: 30%;
+    padding: 60px;
+    background-color: #b7c5c9;
+    align-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+    /* Reset default margin and padding */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Body styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #b7c5c9;
+        color: #333;
+    }
+
+    /* Header styles */
+    header {
+        background-color: #111213;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    /* Footer styles */
+    footer {
+        background-color: #0e0f0f;
+        color: #fff;
+        padding: 15px 0;
+        text-align: center;
+        display: flex;
+        justify-content: space-around;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        align-items: center;
+        left: 0;
+    }
+
+    .footer p {
+        margin-bottom: 5px;
+    }
+
+    .social img {
+        width: 30px;
+        height: 30px;
+        margin: 0 5px;
+    }
+
+    /* Container styles */
+    .container {
+        max-width: 100%;
+        padding: 0 10px;
+        margin: 0 auto;
+    }
+
+    /* Main styles */
+    main {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+    }
+
+    /* Slideshow container styles */
+    .slideshow-container {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .slide img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Weather information container styles */
+    #weather-info {
+        width: 80%;
+        padding: 20px;
+        background-color: #b7c5c9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    /* Location form styles */
+    #locationForm {
+        text-align: center;
+    }
+
+    #locationForm button {
+        background-color: green;
+        padding: 10px;
+        color: gold;
+    }
+
+    #locationForm input {
+        padding: 10px;
+        font-size: small;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+}
+
