@@ -9,6 +9,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet OpenWeatherMap CSS -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/gh/buche/leaflet-openweathermap@master/leaflet-openweathermap.css" />
     <base target="_blank">
 </head>
 
@@ -30,12 +35,12 @@
         <div class="container header-content">
             <div class="logo">
                 <i class="fas fa-cloud-bolt"></i>
-                <span>Atmosphere</span>
+                <span>LifoxSphere</span>
             </div>
             <nav class="nav-links">
-                <a href="#" class="active">Forecast</a>
-                <a href="#">Radar</a>
-                <a href="#">Maps</a>
+                <a href="#forecast" class="nav-link active" data-section="forecast">Forecast</a>
+                <a href="#radar" class="nav-link" data-section="radar">Radar</a>
+                <a href="#maps" class="nav-link" data-section="maps">Maps</a>
             </nav>
             <div class="header-actions">
                 <button id="unit-toggle" class="unit-toggle" title="Toggle Celsius/Fahrenheit">
@@ -50,222 +55,449 @@
     </header>
 
     <main>
-        <!-- Hero Section with Slideshow -->
-        <section class="hero-section">
-            <div class="slideshow-container">
-                <div class="slide active">
-                    <img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=1920&q=80"
-                        alt="Stormy sky">
-                    <div class="slide-content">
-                        <h2>Storm Front Approaching</h2>
-                        <p>Real-time severe weather alerts</p>
+        <!-- ========== FORECAST SECTION ========== -->
+        <section id="forecast" class="page-section active">
+            <!-- Hero Section with Slideshow -->
+            <section class="hero-section">
+                <div class="slideshow-container">
+                    <div class="slide active">
+                        <img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=1920&q=80"
+                            alt="Stormy sky">
+                        <div class="slide-content">
+                            <h2>Storm Front Approaching</h2>
+                            <p>Real-time severe weather alerts</p>
+                        </div>
                     </div>
-                </div>
-                <div class="slide">
-                    <img src="https://images.unsplash.com/photo-1601297183305-6df142704ea2?w=1920&q=80"
-                        alt="Clear sunny day">
-                    <div class="slide-content">
-                        <h2>Perfect Conditions</h2>
-                        <p>Clear skies ahead</p>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1601297183305-6df142704ea2?w=1920&q=80"
+                            alt="Clear sunny day">
+                        <div class="slide-content">
+                            <h2>Perfect Conditions</h2>
+                            <p>Clear skies ahead</p>
+                        </div>
                     </div>
-                </div>
-                <div class="slide">
-                    <img src="https://images.unsplash.com/photo-1483664852095-d6cc6870705d?w=1920&q=80"
-                        alt="Winter landscape">
-                    <div class="slide-content">
-                        <h2>Winter Wonderland</h2>
-                        <p>Snow accumulation forecasts</p>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1483664852095-d6cc6870705d?w=1920&q=80"
+                            alt="Winter landscape">
+                        <div class="slide-content">
+                            <h2>Winter Wonderland</h2>
+                            <p>Snow accumulation forecasts</p>
+                        </div>
                     </div>
-                </div>
-                <div class="slide">
-                    <img src="https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=1920&q=80"
-                        alt="Rainy city">
-                    <div class="slide-content">
-                        <h2>Urban Precipitation</h2>
-                        <p>Minute-by-minute rain tracking</p>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=1920&q=80"
+                            alt="Rainy city">
+                        <div class="slide-content">
+                            <h2>Urban Precipitation</h2>
+                            <p>Minute-by-minute rain tracking</p>
+                        </div>
                     </div>
-                </div>
-                <div class="slide">
-                    <img src="https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=1920&q=80"
-                        alt="Thunderstorm">
-                    <div class="slide-content">
-                        <h2>Electrical Storm</h2>
-                        <p>Lightning detection network</p>
+                    <div class="slide">
+                        <img src="https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=1920&q=80"
+                            alt="Thunderstorm">
+                        <div class="slide-content">
+                            <h2>Electrical Storm</h2>
+                            <p>Lightning detection network</p>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Slide Controls -->
-                <div class="slide-controls">
-                    <button class="slide-btn prev" onclick="changeSlide(-1)"><i
-                            class="fas fa-chevron-left"></i></button>
-                    <div class="slide-dots">
-                        <span class="dot active" onclick="goToSlide(0)"></span>
-                        <span class="dot" onclick="goToSlide(1)"></span>
-                        <span class="dot" onclick="goToSlide(2)"></span>
-                        <span class="dot" onclick="goToSlide(3)"></span>
-                        <span class="dot" onclick="goToSlide(4)"></span>
+                    <div class="slide-controls">
+                        <button class="slide-btn prev" onclick="changeSlide(-1)"><i
+                                class="fas fa-chevron-left"></i></button>
+                        <div class="slide-dots">
+                            <span class="dot active" onclick="goToSlide(0)"></span>
+                            <span class="dot" onclick="goToSlide(1)"></span>
+                            <span class="dot" onclick="goToSlide(2)"></span>
+                            <span class="dot" onclick="goToSlide(3)"></span>
+                            <span class="dot" onclick="goToSlide(4)"></span>
+                        </div>
+                        <button class="slide-btn next" onclick="changeSlide(1)"><i
+                                class="fas fa-chevron-right"></i></button>
                     </div>
-                    <button class="slide-btn next" onclick="changeSlide(1)"><i
-                            class="fas fa-chevron-right"></i></button>
-                </div>
 
-                <!-- Progress Bar -->
-                <div class="slide-progress">
-                    <div class="progress-bar" id="progress-bar"></div>
+                    <div class="slide-progress">
+                        <div class="progress-bar" id="progress-bar"></div>
+                    </div>
                 </div>
-            </div>
+            </section>
+
+            <!-- Search Section -->
+            <section class="search-section">
+                <div class="container">
+                    <div class="search-card glass">
+                        <h2><i class="fas fa-location-dot"></i> Location Search</h2>
+                        <form id="locationForm" class="search-form">
+                            <div class="input-group location-group">
+                                <i class="fas fa-city input-icon"></i>
+                                <input type="text" id="location" placeholder="Enter city name..." required
+                                    autocomplete="off">
+                                <button type="button" id="geo-btn" class="geo-btn" title="Use my location">
+                                    <i class="fas fa-crosshairs"></i>
+                                </button>
+                            </div>
+                            <div class="input-group date-group">
+                                <i class="fas fa-calendar input-icon"></i>
+                                <input type="date" id="date" required>
+                            </div>
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search"></i>
+                                <span>Get Forecast</span>
+                            </button>
+                        </form>
+                        <div id="search-error" class="search-error hidden">
+                            <i class="fas fa-circle-exclamation"></i>
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Weather Dashboard -->
+            <section class="dashboard-section">
+                <div class="container">
+                    <div id="weather-dashboard" class="weather-dashboard hidden">
+
+                        <div class="dashboard-grid">
+                            <div class="current-weather-card glass">
+                                <div class="current-header">
+                                    <div class="location-info">
+                                        <h2 id="city-name">--</h2>
+                                        <p id="current-date">--</p>
+                                        <span id="weather-badge" class="weather-badge">--</span>
+                                    </div>
+                                    <div class="current-icon">
+                                        <i id="main-icon" class="fas fa-sun"></i>
+                                    </div>
+                                </div>
+                                <div class="current-temp">
+                                    <span id="temperature" class="temp-value">--</span>
+                                    <span class="temp-unit">°</span>
+                                </div>
+                                <p id="weather-desc" class="weather-desc">--</p>
+
+                                <div class="temp-range">
+                                    <span><i class="fas fa-arrow-down"></i> <span id="temp-min">--</span>°</span>
+                                    <span><i class="fas fa-arrow-up"></i> <span id="temp-max">--</span>°</span>
+                                </div>
+                            </div>
+
+                            <div class="details-grid">
+                                <div class="detail-card glass">
+                                    <i class="fas fa-droplet"></i>
+                                    <div class="detail-info">
+                                        <span class="detail-label">Humidity</span>
+                                        <span id="humidity" class="detail-value">--%</span>
+                                    </div>
+                                </div>
+                                <div class="detail-card glass">
+                                    <i class="fas fa-wind"></i>
+                                    <div class="detail-info">
+                                        <span class="detail-label">Wind Speed</span>
+                                        <span id="wind-speed" class="detail-value">-- km/h</span>
+                                    </div>
+                                </div>
+                                <div class="detail-card glass">
+                                    <i class="fas fa-compass"></i>
+                                    <div class="detail-info">
+                                        <span class="detail-label">Direction</span>
+                                        <span id="wind-dir" class="detail-value">--</span>
+                                    </div>
+                                </div>
+                                <div class="detail-card glass">
+                                    <i class="fas fa-gauge-high"></i>
+                                    <div class="detail-info">
+                                        <span class="detail-label">Pressure</span>
+                                        <span id="pressure" class="detail-value">-- hPa</span>
+                                    </div>
+                                </div>
+                                <div class="detail-card glass">
+                                    <i class="fas fa-eye"></i>
+                                    <div class="detail-info">
+                                        <span class="detail-label">Visibility</span>
+                                        <span id="visibility" class="detail-value">-- km</span>
+                                    </div>
+                                </div>
+                                <div class="detail-card glass">
+                                    <i class="fas fa-cloud"></i>
+                                    <div class="detail-info">
+                                        <span class="detail-label">Cloud Cover</span>
+                                        <span id="clouds" class="detail-value">--%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="hourly-section glass">
+                            <h3><i class="fas fa-clock"></i> 24-Hour Forecast</h3>
+                            <div id="hourly-forecast" class="hourly-scroll"></div>
+                        </div>
+
+                        <div class="daily-section glass">
+                            <h3><i class="fas fa-calendar-days"></i> 5-Day Outlook</h3>
+                            <div id="daily-forecast" class="daily-grid"></div>
+                        </div>
+
+                        <div class="astro-section">
+                            <div class="astro-card glass">
+                                <i class="fas fa-sun"></i>
+                                <div class="astro-info">
+                                    <span class="astro-label">Sunrise</span>
+                                    <span id="sunrise" class="astro-value">--:--</span>
+                                </div>
+                            </div>
+                            <div class="astro-card glass">
+                                <i class="fas fa-moon"></i>
+                                <div class="astro-info">
+                                    <span class="astro-label">Sunset</span>
+                                    <span id="sunset" class="astro-value">--:--</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="empty-state" class="empty-state">
+                        <div class="empty-icon">
+                            <i class="fas fa-cloud-sun"></i>
+                        </div>
+                        <h3>Ready to Explore</h3>
+                        <p>Enter a location above to see detailed weather analytics and forecasts.</p>
+                    </div>
+                </div>
+            </section>
         </section>
 
-        <!-- Search Section -->
-        <section class="search-section">
-            <div class="container">
-                <div class="search-card glass">
-                    <h2><i class="fas fa-location-dot"></i> Location Search</h2>
-                    <form id="locationForm" class="search-form">
-                        <div class="input-group location-group">
-                            <i class="fas fa-city input-icon"></i>
-                            <input type="text" id="location" placeholder="Enter city name..." required
-                                autocomplete="off">
-                            <button type="button" id="geo-btn" class="geo-btn" title="Use my location">
+        <!-- ========== RADAR SECTION ========== -->
+        <section id="radar" class="page-section">
+            <div class="section-header">
+                <div class="container">
+                    <h1><i class="fas fa-satellite-dish"></i> Live Weather Radar</h1>
+                    <p>Real-time precipitation, cloud cover, and storm tracking</p>
+                </div>
+            </div>
+
+            <div class="container radar-container">
+                <div class="radar-controls glass">
+                    <div class="radar-layer-toggles">
+                        <h3><i class="fas fa-layer-group"></i> Radar Layers</h3>
+                        <div class="layer-buttons">
+                            <button class="layer-btn active" data-layer="precipitation">
+                                <i class="fas fa-cloud-rain"></i>
+                                <span>Precipitation</span>
+                            </button>
+                            <button class="layer-btn" data-layer="clouds">
+                                <i class="fas fa-cloud"></i>
+                                <span>Clouds</span>
+                            </button>
+                            <button class="layer-btn" data-layer="rain">
+                                <i class="fas fa-tint"></i>
+                                <span>Rain</span>
+                            </button>
+                            <button class="layer-btn" data-layer="snow">
+                                <i class="fas fa-snowflake"></i>
+                                <span>Snow</span>
+                            </button>
+                            <button class="layer-btn" data-layer="temp">
+                                <i class="fas fa-temperature-half"></i>
+                                <span>Temperature</span>
+                            </button>
+                            <button class="layer-btn" data-layer="wind">
+                                <i class="fas fa-wind"></i>
+                                <span>Wind</span>
+                            </button>
+                            <button class="layer-btn" data-layer="pressure">
+                                <i class="fas fa-gauge"></i>
+                                <span>Pressure</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="radar-location-search">
+                        <h3><i class="fas fa-location-crosshairs"></i> Radar Location</h3>
+                        <div class="radar-search-form">
+                            <input type="text" id="radar-location-input" placeholder="Search city for radar...">
+                            <button id="radar-search-btn" class="search-btn-small">
+                                <i class="fas fa-search"></i>
+                            </button>
+                            <button id="radar-geo-btn" class="geo-btn-small" title="My location">
                                 <i class="fas fa-crosshairs"></i>
                             </button>
                         </div>
-                        <div class="input-group date-group">
-                            <i class="fas fa-calendar input-icon"></i>
-                            <input type="date" id="date" required>
+                    </div>
+
+                    <div class="radar-legend">
+                        <h3><i class="fas fa-list"></i> Legend</h3>
+                        <div id="radar-legend-content" class="legend-content">
+                            <div class="legend-item">
+                                <span class="legend-color"
+                                    style="background: linear-gradient(to right, #4a90d9, #00ff00, #ffff00, #ff0000, #ff00ff)"></span>
+                                <span class="legend-label">Light → Heavy Precipitation</span>
+                            </div>
                         </div>
-                        <button type="submit" class="search-btn">
-                            <i class="fas fa-search"></i>
-                            <span>Get Forecast</span>
-                        </button>
-                    </form>
-                    <div id="search-error" class="search-error hidden">
-                        <i class="fas fa-circle-exclamation"></i>
-                        <span></span>
+                    </div>
+
+                    <div class="radar-info">
+                        <div class="info-item">
+                            <i class="fas fa-clock"></i>
+                            <span id="radar-timestamp">Last updated: --</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-globe"></i>
+                            <span>Global coverage</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="radar-map-wrapper glass">
+                    <div id="radar-map" class="radar-map"></div>
+                    <div class="map-overlay-controls">
+                        <button id="radar-zoom-in" class="map-overlay-btn" title="Zoom in"><i
+                                class="fas fa-plus"></i></button>
+                        <button id="radar-zoom-out" class="map-overlay-btn" title="Zoom out"><i
+                                class="fas fa-minus"></i></button>
+                        <button id="radar-reset" class="map-overlay-btn" title="Reset view"><i
+                                class="fas fa-compress"></i></button>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Weather Dashboard -->
-        <section class="dashboard-section">
-            <div class="container">
-                <div id="weather-dashboard" class="weather-dashboard hidden">
+        <!-- ========== MAPS SECTION ========== -->
+        <section id="maps" class="page-section">
+            <div class="section-header">
+                <div class="container">
+                    <h1><i class="fas fa-map"></i> Weather Maps</h1>
+                    <p>Interactive weather layers and global conditions</p>
+                </div>
+            </div>
 
-                    <!-- Current Weather Card -->
-                    <div class="dashboard-grid">
-                        <div class="current-weather-card glass">
-                            <div class="current-header">
-                                <div class="location-info">
-                                    <h2 id="city-name">--</h2>
-                                    <p id="current-date">--</p>
-                                    <span id="weather-badge" class="weather-badge">--</span>
-                                </div>
-                                <div class="current-icon">
-                                    <i id="main-icon" class="fas fa-sun"></i>
-                                </div>
-                            </div>
-                            <div class="current-temp">
-                                <span id="temperature" class="temp-value">--</span>
-                                <span class="temp-unit">°</span>
-                            </div>
-                            <p id="weather-desc" class="weather-desc">--</p>
+            <div class="container maps-container">
+                <div class="maps-sidebar glass">
+                    <div class="maps-tabs">
+                        <button class="maps-tab active" data-map-tab="conditions">
+                            <i class="fas fa-temperature-high"></i>
+                            <span>Conditions</span>
+                        </button>
+                        <button class="maps-tab" data-map-tab="precipitation">
+                            <i class="fas fa-cloud-showers-heavy"></i>
+                            <span>Precipitation</span>
+                        </button>
+                        <button class="maps-tab" data-map-tab="wind">
+                            <i class="fas fa-wind"></i>
+                            <span>Wind & Pressure</span>
+                        </button>
+                        <button class="maps-tab" data-map-tab="satellite">
+                            <i class="fas fa-satellite"></i>
+                            <span>Satellite</span>
+                        </button>
+                    </div>
 
-                            <div class="temp-range">
-                                <span><i class="fas fa-arrow-down"></i> <span id="temp-min">--</span>°</span>
-                                <span><i class="fas fa-arrow-up"></i> <span id="temp-max">--</span>°</span>
-                            </div>
+                    <div class="maps-layer-panel">
+                        <h3><i class="fas fa-sliders"></i> Map Options</h3>
+
+                        <div class="map-option-group">
+                            <label>Base Map</label>
+                            <select id="base-map-select">
+                                <option value="osm">OpenStreetMap</option>
+                                <option value="dark">Dark Matter</option>
+                                <option value="terrain">Terrain</option>
+                                <option value="satellite">Satellite</option>
+                            </select>
                         </div>
 
-                        <!-- Details Grid -->
-                        <div class="details-grid">
-                            <div class="detail-card glass">
-                                <i class="fas fa-droplet"></i>
-                                <div class="detail-info">
-                                    <span class="detail-label">Humidity</span>
-                                    <span id="humidity" class="detail-value">--%</span>
-                                </div>
-                            </div>
-                            <div class="detail-card glass">
-                                <i class="fas fa-wind"></i>
-                                <div class="detail-info">
-                                    <span class="detail-label">Wind Speed</span>
-                                    <span id="wind-speed" class="detail-value">-- km/h</span>
-                                </div>
-                            </div>
-                            <div class="detail-card glass">
-                                <i class="fas fa-compass"></i>
-                                <div class="detail-info">
-                                    <span class="detail-label">Direction</span>
-                                    <span id="wind-dir" class="detail-value">--</span>
-                                </div>
-                            </div>
-                            <div class="detail-card glass">
-                                <i class="fas fa-gauge-high"></i>
-                                <div class="detail-info">
-                                    <span class="detail-label">Pressure</span>
-                                    <span id="pressure" class="detail-value">-- hPa</span>
-                                </div>
-                            </div>
-                            <div class="detail-card glass">
-                                <i class="fas fa-eye"></i>
-                                <div class="detail-info">
-                                    <span class="detail-label">Visibility</span>
-                                    <span id="visibility" class="detail-value">-- km</span>
-                                </div>
-                            </div>
-                            <div class="detail-card glass">
-                                <i class="fas fa-cloud"></i>
-                                <div class="detail-info">
-                                    <span class="detail-label">Cloud Cover</span>
-                                    <span id="clouds" class="detail-value">--%</span>
-                                </div>
-                            </div>
+                        <div class="map-option-group">
+                            <label>Overlay Opacity</label>
+                            <input type="range" id="overlay-opacity" min="0" max="100" value="60">
+                            <span class="range-value">60%</span>
+                        </div>
+
+                        <div class="map-option-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="show-cities" checked>
+                                <span>Show Cities</span>
+                            </label>
+                        </div>
+
+                        <div class="map-option-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="show-stations" checked>
+                                <span>Weather Stations</span>
+                            </label>
+                        </div>
+
+                        <div class="map-option-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="animate-layers">
+                                <span>Animate Layers</span>
+                            </label>
                         </div>
                     </div>
 
-                    <!-- Hourly Forecast -->
-                    <div class="hourly-section glass">
-                        <h3><i class="fas fa-clock"></i> 24-Hour Forecast</h3>
-                        <div id="hourly-forecast" class="hourly-scroll">
-                            <!-- Dynamically populated -->
+                    <div class="maps-search">
+                        <h3><i class="fas fa-search-location"></i> Go to Location</h3>
+                        <div class="maps-search-form">
+                            <input type="text" id="maps-location-input" placeholder="City or coordinates...">
+                            <button id="maps-search-btn"><i class="fas fa-arrow-right"></i></button>
                         </div>
                     </div>
 
-                    <!-- 5-Day Forecast -->
-                    <div class="daily-section glass">
-                        <h3><i class="fas fa-calendar-days"></i> 5-Day Outlook</h3>
-                        <div id="daily-forecast" class="daily-grid">
-                            <!-- Dynamically populated -->
+                    <div class="maps-stats">
+                        <h3><i class="fas fa-chart-bar"></i> Global Stats</h3>
+                        <div class="stat-item">
+                            <span class="stat-label">Active Stations</span>
+                            <span class="stat-value">82,000+</span>
                         </div>
-                    </div>
-
-                    <!-- Sun/Moon Info -->
-                    <div class="astro-section">
-                        <div class="astro-card glass">
-                            <i class="fas fa-sun"></i>
-                            <div class="astro-info">
-                                <span class="astro-label">Sunrise</span>
-                                <span id="sunrise" class="astro-value">--:--</span>
-                            </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Update Frequency</span>
+                            <span class="stat-value">10 min</span>
                         </div>
-                        <div class="astro-card glass">
-                            <i class="fas fa-moon"></i>
-                            <div class="astro-info">
-                                <span class="astro-label">Sunset</span>
-                                <span id="sunset" class="astro-value">--:--</span>
-                            </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Data Sources</span>
+                            <span class="stat-value">Multi-model</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Empty State -->
-                <div id="empty-state" class="empty-state">
-                    <div class="empty-icon">
-                        <i class="fas fa-cloud-sun"></i>
+                <div class="maps-main-wrapper">
+                    <div id="weather-map" class="weather-map"></div>
+
+                    <div class="map-legend-bar">
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #313695"></span>
+                            <span class="legend-bar-label">Extreme Cold</span>
+                        </div>
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #4575b4"></span>
+                            <span class="legend-bar-label">Cold</span>
+                        </div>
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #74add1"></span>
+                            <span class="legend-bar-label">Cool</span>
+                        </div>
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #abd9e9"></span>
+                            <span class="legend-bar-label">Mild</span>
+                        </div>
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #e0f3f8"></span>
+                            <span class="legend-bar-label">Comfortable</span>
+                        </div>
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #fee090"></span>
+                            <span class="legend-bar-label">Warm</span>
+                        </div>
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #fdae61"></span>
+                            <span class="legend-bar-label">Hot</span>
+                        </div>
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #f46d43"></span>
+                            <span class="legend-bar-label">Very Hot</span>
+                        </div>
+                        <div class="legend-bar-item">
+                            <span class="legend-bar-color" style="background: #d73027"></span>
+                            <span class="legend-bar-label">Extreme Heat</span>
+                        </div>
                     </div>
-                    <h3>Ready to Explore</h3>
-                    <p>Enter a location above to see detailed weather analytics and forecasts.</p>
                 </div>
             </div>
         </section>
@@ -288,7 +520,7 @@
                 <a href="https://wa.me/+2348033638719" target="_blank" class="social-link" aria-label="WhatsApp">
                     <i class="fab fa-whatsapp"></i>
                 </a>
-                <a href="https://github.com" target="_blank" class="social-link" aria-label="GitHub">
+                <a href="https://github.com/ogedz" target="_blank" class="social-link" aria-label="GitHub">
                     <i class="fab fa-github"></i>
                 </a>
             </div>
@@ -296,6 +528,9 @@
         </div>
     </footer>
 
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/buche/leaflet-openweathermap@master/leaflet-openweathermap.js"></script>
     <script src="weather.js"></script>
 </body>
 
