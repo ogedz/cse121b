@@ -1,0 +1,258 @@
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styles */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #b7c5c9;
+    color: #333;
+}
+
+/* Header styles */
+header {
+    background-color: #111213;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+/* Footer styles */
+footer {
+    background-color: #0e0f0f;
+    color: #fff;
+    padding: 15px 0;
+    text-align: center;
+    display: flex;
+    justify-content: space-around;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    align-items: center;
+    left: 0;
+}
+
+.footer p {
+    margin-bottom: 5px;
+}
+
+.social img {
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+}
+  
+/* Container styles */
+.container {
+    max-width: 1200px;
+    padding: 0 20px;
+    margin: 0 auto;
+}
+
+/* Weather container styles */
+.weather-container {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+    padding: 20px;
+    width: calc(50% - 20px); /* Adjusted width to accommodate margins */
+    display: inline-flex; /* Change to inline-block */
+    margin-right: 20px; /* Add margin for spacing */
+    margin-bottom: 20px; /* Add margin for spacing */
+}
+
+
+.weather-container h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.weather-container p {
+    margin-bottom: 8px;
+}
+
+.weather-container i {
+    font-size: 32px;
+    margin-top: auto;
+}
+
+/* Location form styles */
+#locationForm {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+#locationForm label {
+    display: table-column;
+    margin-bottom: 5px;
+}
+
+#locationForm input[type="text"],
+#locationForm input[type="date"],
+#locationForm button {
+    padding: 10px;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+#locationForm button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+#locationForm button:hover {
+    background-color: #555;
+}
+
+
+/* Main styles */
+main {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px 0;
+}
+
+/* Slideshow container styles */
+.slideshow-container {
+    width: 65%;
+    position: relative;
+}
+
+.slide {
+    display: none;
+}
+
+.slide img {
+    width: 100%;
+    height: auto;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+}
+
+/* Weather information container styles */
+#weather-info {
+    width: 30%;
+    padding: 60px;
+    background-color: #b7c5c9;
+    align-content: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: large;
+}
+
+/* Media query for small devices */
+@media only screen and (max-width: 600px) {
+    /* Reset default margin and padding */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Body styles */
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #b7c5c9;
+        color: #333;
+    }
+
+    /* Header styles */
+    header {
+        background-color: #111213;
+        color: #fff;
+        padding: 20px 0;
+        text-align: center;
+    }
+
+    /* Footer styles */
+    footer {
+        background-color: #0e0f0f;
+        color: #fff;
+        padding: 15px 0;
+        text-align: center;
+        display: flex;
+        justify-content: space-around;
+        position: relative;
+        bottom: 0;
+        width: 100%;
+        align-items: center;
+        left: 0;
+    }
+
+    .footer p {
+        margin-bottom: 5px;
+    }
+
+    .social img {
+        width: 30px;
+        height: 30px;
+        margin: 0 5px;
+    }
+    
+    /* Container styles */
+    .container {
+        max-width: 100%;
+        padding: 0 10px;
+        margin: 0 auto;
+    }
+
+    /* Main styles */
+    main {
+        flex-direction: column;
+        align-items: center;
+        padding: 20px 0;
+    }
+
+    /* Slideshow container styles */
+    .slideshow-container {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .slide img {
+        width: 100%;
+        height: auto;
+    }
+
+    /* Weather information container styles */
+    #weather-info {
+        width: 80%;
+        padding: 20px;
+        background-color: #b7c5c9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: center;
+    }
+
+    /* Location form styles */
+    #locationForm {
+        text-align: center;
+    }
+
+    #locationForm button {
+        background-color: green;
+        padding: 10px;
+        color: gold;
+    }
+
+    #locationForm input {
+        padding: 10px;
+        font-size: small;
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+}

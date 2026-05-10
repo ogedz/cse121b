@@ -1,80 +1,302 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather Forecast App</title>
+    <title>Atmosphere | Advanced Weather Intelligence</title>
     <link rel="stylesheet" href="weather.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <base target="_blank">
 </head>
+
 <body>
-    <header>
-        <div class="container">
-            <h1>Weather Forecast</h1>
+    <!-- Dynamic Background Overlay -->
+    <div id="bg-overlay" class="bg-overlay"></div>
+
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="loading-screen hidden">
+        <div class="loader">
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+            <div class="loader-ring"></div>
+        </div>
+        <p>Analyzing atmospheric conditions...</p>
+    </div>
+
+    <header class="glass-header">
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-cloud-bolt"></i>
+                <span>Atmosphere</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#" class="active">Forecast</a>
+                <a href="#">Radar</a>
+                <a href="#">Maps</a>
+            </nav>
+            <div class="header-actions">
+                <button id="unit-toggle" class="unit-toggle" title="Toggle Celsius/Fahrenheit">
+                    <span class="unit-c active">°C</span>
+                    <span class="unit-f">°F</span>
+                </button>
+                <button id="theme-toggle" class="theme-toggle" title="Toggle Theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
         </div>
     </header>
+
     <main>
-        <div class="container">
-            <div id="slideshow-container" class="slideshow-container">
-                <div class="slide fade">
-                    <img src="images/OIG1.jpg" alt="Scenic Image 1">
-                    <div class="overlay"></div>
+        <!-- Hero Section with Slideshow -->
+        <section class="hero-section">
+            <div class="slideshow-container">
+                <div class="slide active">
+                    <img src="https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=1920&q=80"
+                        alt="Stormy sky">
+                    <div class="slide-content">
+                        <h2>Storm Front Approaching</h2>
+                        <p>Real-time severe weather alerts</p>
+                    </div>
                 </div>
-                <div class="slide fade">
-                    <img src="images/OIG4(2).jpg" alt="Scenic Image 2">
-                    <div class="overlay"></div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1601297183305-6df142704ea2?w=1920&q=80"
+                        alt="Clear sunny day">
+                    <div class="slide-content">
+                        <h2>Perfect Conditions</h2>
+                        <p>Clear skies ahead</p>
+                    </div>
                 </div>
-                <div class="slide fade">
-                    <img src="images/OIG2.jpg" alt="Scenic Image 3">
-                    <div class="overlay"></div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1483664852095-d6cc6870705d?w=1920&q=80"
+                        alt="Winter landscape">
+                    <div class="slide-content">
+                        <h2>Winter Wonderland</h2>
+                        <p>Snow accumulation forecasts</p>
+                    </div>
                 </div>
-                <div class="slide fade">
-                    <img src="images/OIG4.jpg" alt="Scenic Image 4">
-                    <div class="overlay"></div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1515694346937-94d85e41e6f0?w=1920&q=80"
+                        alt="Rainy city">
+                    <div class="slide-content">
+                        <h2>Urban Precipitation</h2>
+                        <p>Minute-by-minute rain tracking</p>
+                    </div>
                 </div>
-                <div class="slide fade">
-                    <img src="images/OIG2.sAasiq89hABWypybgD.jpg" alt="Scenic Image 5">
-                    <div class="overlay"></div>
+                <div class="slide">
+                    <img src="https://images.unsplash.com/photo-1534088568595-a066f410bcda?w=1920&q=80"
+                        alt="Thunderstorm">
+                    <div class="slide-content">
+                        <h2>Electrical Storm</h2>
+                        <p>Lightning detection network</p>
+                    </div>
                 </div>
-                <div class="slide fade">
-                    <img src="images/OIG3.b.jpg" alt="Scenic Image 6">
-                    <div class="overlay"></div>
+
+                <!-- Slide Controls -->
+                <div class="slide-controls">
+                    <button class="slide-btn prev" onclick="changeSlide(-1)"><i
+                            class="fas fa-chevron-left"></i></button>
+                    <div class="slide-dots">
+                        <span class="dot active" onclick="goToSlide(0)"></span>
+                        <span class="dot" onclick="goToSlide(1)"></span>
+                        <span class="dot" onclick="goToSlide(2)"></span>
+                        <span class="dot" onclick="goToSlide(3)"></span>
+                        <span class="dot" onclick="goToSlide(4)"></span>
+                    </div>
+                    <button class="slide-btn next" onclick="changeSlide(1)"><i
+                            class="fas fa-chevron-right"></i></button>
                 </div>
-                <div class="slide fade">
-                    <img src="images/OIG3.jpg" alt="Scenic Image 7">
-                    <div class="overlay"></div>
+
+                <!-- Progress Bar -->
+                <div class="slide-progress">
+                    <div class="progress-bar" id="progress-bar"></div>
                 </div>
             </div>
-        </div>
-        <div class="container">
-            <form id="locationForm">
-                <label for="location">Enter Location:</label>
-                <input type="text" id="location" placeholder="City name" required>
-                <label for="date">Select Date:</label>
-                <input type="date" id="date" required>
-                <button type="submit"><i class="fas fa-search"></i> Get Weather</button>
-            </form>
-            <div id="weather-info" aria-live="polite">
-                <!-- Weather information will be displayed here -->
+        </section>
+
+        <!-- Search Section -->
+        <section class="search-section">
+            <div class="container">
+                <div class="search-card glass">
+                    <h2><i class="fas fa-location-dot"></i> Location Search</h2>
+                    <form id="locationForm" class="search-form">
+                        <div class="input-group location-group">
+                            <i class="fas fa-city input-icon"></i>
+                            <input type="text" id="location" placeholder="Enter city name..." required
+                                autocomplete="off">
+                            <button type="button" id="geo-btn" class="geo-btn" title="Use my location">
+                                <i class="fas fa-crosshairs"></i>
+                            </button>
+                        </div>
+                        <div class="input-group date-group">
+                            <i class="fas fa-calendar input-icon"></i>
+                            <input type="date" id="date" required>
+                        </div>
+                        <button type="submit" class="search-btn">
+                            <i class="fas fa-search"></i>
+                            <span>Get Forecast</span>
+                        </button>
+                    </form>
+                    <div id="search-error" class="search-error hidden">
+                        <i class="fas fa-circle-exclamation"></i>
+                        <span></span>
+                    </div>
+                </div>
             </div>
-        </div>
+        </section>
+
+        <!-- Weather Dashboard -->
+        <section class="dashboard-section">
+            <div class="container">
+                <div id="weather-dashboard" class="weather-dashboard hidden">
+
+                    <!-- Current Weather Card -->
+                    <div class="dashboard-grid">
+                        <div class="current-weather-card glass">
+                            <div class="current-header">
+                                <div class="location-info">
+                                    <h2 id="city-name">--</h2>
+                                    <p id="current-date">--</p>
+                                    <span id="weather-badge" class="weather-badge">--</span>
+                                </div>
+                                <div class="current-icon">
+                                    <i id="main-icon" class="fas fa-sun"></i>
+                                </div>
+                            </div>
+                            <div class="current-temp">
+                                <span id="temperature" class="temp-value">--</span>
+                                <span class="temp-unit">°</span>
+                            </div>
+                            <p id="weather-desc" class="weather-desc">--</p>
+
+                            <div class="temp-range">
+                                <span><i class="fas fa-arrow-down"></i> <span id="temp-min">--</span>°</span>
+                                <span><i class="fas fa-arrow-up"></i> <span id="temp-max">--</span>°</span>
+                            </div>
+                        </div>
+
+                        <!-- Details Grid -->
+                        <div class="details-grid">
+                            <div class="detail-card glass">
+                                <i class="fas fa-droplet"></i>
+                                <div class="detail-info">
+                                    <span class="detail-label">Humidity</span>
+                                    <span id="humidity" class="detail-value">--%</span>
+                                </div>
+                            </div>
+                            <div class="detail-card glass">
+                                <i class="fas fa-wind"></i>
+                                <div class="detail-info">
+                                    <span class="detail-label">Wind Speed</span>
+                                    <span id="wind-speed" class="detail-value">-- km/h</span>
+                                </div>
+                            </div>
+                            <div class="detail-card glass">
+                                <i class="fas fa-compass"></i>
+                                <div class="detail-info">
+                                    <span class="detail-label">Direction</span>
+                                    <span id="wind-dir" class="detail-value">--</span>
+                                </div>
+                            </div>
+                            <div class="detail-card glass">
+                                <i class="fas fa-gauge-high"></i>
+                                <div class="detail-info">
+                                    <span class="detail-label">Pressure</span>
+                                    <span id="pressure" class="detail-value">-- hPa</span>
+                                </div>
+                            </div>
+                            <div class="detail-card glass">
+                                <i class="fas fa-eye"></i>
+                                <div class="detail-info">
+                                    <span class="detail-label">Visibility</span>
+                                    <span id="visibility" class="detail-value">-- km</span>
+                                </div>
+                            </div>
+                            <div class="detail-card glass">
+                                <i class="fas fa-cloud"></i>
+                                <div class="detail-info">
+                                    <span class="detail-label">Cloud Cover</span>
+                                    <span id="clouds" class="detail-value">--%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hourly Forecast -->
+                    <div class="hourly-section glass">
+                        <h3><i class="fas fa-clock"></i> 24-Hour Forecast</h3>
+                        <div id="hourly-forecast" class="hourly-scroll">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <!-- 5-Day Forecast -->
+                    <div class="daily-section glass">
+                        <h3><i class="fas fa-calendar-days"></i> 5-Day Outlook</h3>
+                        <div id="daily-forecast" class="daily-grid">
+                            <!-- Dynamically populated -->
+                        </div>
+                    </div>
+
+                    <!-- Sun/Moon Info -->
+                    <div class="astro-section">
+                        <div class="astro-card glass">
+                            <i class="fas fa-sun"></i>
+                            <div class="astro-info">
+                                <span class="astro-label">Sunrise</span>
+                                <span id="sunrise" class="astro-value">--:--</span>
+                            </div>
+                        </div>
+                        <div class="astro-card glass">
+                            <i class="fas fa-moon"></i>
+                            <div class="astro-info">
+                                <span class="astro-label">Sunset</span>
+                                <span id="sunset" class="astro-value">--:--</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-cloud-sun"></i>
+                    </div>
+                    <h3>Ready to Explore</h3>
+                    <p>Enter a location above to see detailed weather analytics and forecasts.</p>
+                </div>
+            </div>
+        </section>
     </main>
-    <footer>
-        <div class="container">
-            <p>&copy; 2024 | Ogedengbe | Weather Forecast App | All Right Reserved </p>
-            <div class="social">
-                <a href="https://facebook.com/ogedz" target="_blank">
-                    <img src="images/fb.jpg" alt="fb icon">
+
+    <footer class="glass-footer">
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <i class="fas fa-cloud-bolt"></i>
+                <span>Atmosphere</span>
+            </div>
+            <p class="footer-text">Precision weather intelligence powered by OpenWeatherMap</p>
+            <div class="social-links">
+                <a href="https://facebook.com/m-ogedz" target="_blank" class="social-link" aria-label="Facebook">
+                    <i class="fab fa-facebook-f"></i>
                 </a>
-                <a href="https://linkedin.com/in/maccabaeus-ogedengbe/" target="_blank">
-                    <img src="images/linkedin.png" alt="linkedin icon">
+                <a href="https://linkedin.com/in/m-ogedz/" target="_blank" class="social-link" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin-in"></i>
                 </a>
-                <a href="https://wa.me/+2348033638719" target="_blank">
-                    <img src="images/whatsapp.webp" alt="whatsapp icon">
+                <a href="https://wa.me/+2348033638719" target="_blank" class="social-link" aria-label="WhatsApp">
+                    <i class="fab fa-whatsapp"></i>
+                </a>
+                <a href="https://github.com" target="_blank" class="social-link" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
                 </a>
             </div>
+            <p class="copyright"> 2024 Ogedengbe | All Rights Reserved</p>
         </div>
     </footer>
+
     <script src="weather.js"></script>
 </body>
+
 </html>
