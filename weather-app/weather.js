@@ -1,6 +1,6 @@
 /* ============================================
-   ATMOSPHERE WEATHER APP - ADVANCED JS
-   WITH RADAR & MAPS
+   ATMOSPHERE WEATHER APP - FIXED JS
+   PROPER TAB SWITCHING + MAP INITIALIZATION
    ============================================ */
 
 const API_KEY = '1e2bec4abb80b8f25eba7c9e5a5d556f';
@@ -23,6 +23,8 @@ let currentMapLayer = null;
 let currentBaseLayer = null;
 let weatherStationsLayer = null;
 let citiesLayer = null;
+let radarInitialized = false;
+let mapsInitialized = false;
 
 // DOM Elements
 const loadingScreen = document.getElementById('loading-screen');
@@ -42,6 +44,9 @@ function init() {
     setDefaultDate();
     setupNavigation();
 
+    // Ensure only forecast is visible initially
+    showSection('forecast');
+
     // Hide loading screen after initial load
     setTimeout(() => {
         loadingScreen.classList.add('hidden');
@@ -56,11 +61,10 @@ function setDefaultDate() {
 }
 
 // ============================================
-// NAVIGATION (Tab System)
+// NAVIGATION (Tab System) - FIXED
 // ============================================
 function setupNavigation() {
     const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('.page-section');
 
     navLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -72,15 +76,14 @@ function setupNavigation() {
             link.classList.add('active');
 
             // Show target section
-            sections.forEach(s => s.classList.remove('active'));
-            document.getElementById(targetSection).classList.add('active');
+            showSection(targetSection);
 
             // Initialize maps when navigating to radar/maps
-            if (targetSection === 'radar' && !radarMap) {
-                setTimeout(initRadarMap, 100);
+            if (targetSection === 'radar' && !radarInitialized) {
+                setTimeout(initRadarMap, 150);
             }
-            if (targetSection === 'maps' && !weatherMap) {
-                setTimeout(initWeatherMap, 100);
+            if (targetSection === 'maps' && !mapsInitialized) {
+                setTimeout(initWeatherMap, 150);
             }
 
             // Scroll to top
@@ -89,12 +92,28 @@ function setupNavigation() {
     });
 }
 
+function showSection(sectionId) {
+    // Hide ALL sections first
+    const allSections = document.querySelectorAll('.page-section');
+    allSections.forEach(section => {
+        section.classList.remove('active');
+    });
+
+    // Show only the target section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.classList.add('active');
+    }
+}
+
 // ============================================
 // RADAR MAP
 // ============================================
 function initRadarMap() {
+    if (radarInitialized) return;
+
     const mapContainer = document.getElementById('radar-map');
-    if (!mapContainer || radarMap) return;
+    if (!mapContainer) return;
 
     // Initialize Leaflet map
     radarMap = L.map('radar-map', {
@@ -122,6 +141,13 @@ function initRadarMap() {
 
     // Setup layer toggles
     setupRadarLayerToggles();
+
+    radarInitialized = true;
+
+    // Force map refresh after container becomes visible
+    setTimeout(() => {
+        radarMap.invalidateSize();
+    }, 300);
 }
 
 function addRadarLayer(layerType) {
@@ -155,6 +181,8 @@ function addRadarLayer(layerType) {
 
 function updateRadarLegend(layerType) {
     const legendContent = document.getElementById('radar-legend-content');
+    if (!legendContent) return;
+
     const legends = {
         'precipitation': { gradient: '#4a90d9, #00ff00, #ffff00, #ff0000, #ff00ff', label: 'Light → Heavy Precipitation' },
         'clouds': { gradient: '#ffffff, #cccccc, #999999, #666666, #333333', label: 'Clear → Overcast' },
@@ -176,36 +204,43 @@ function updateRadarLegend(layerType) {
 
 function updateRadarTimestamp() {
     const timestamp = document.getElementById('radar-timestamp');
+    if (!timestamp) return;
     const now = new Date();
     timestamp.textContent = `Last updated: ${now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
 function setupRadarControls() {
     // Zoom controls
-    document.getElementById('radar-zoom-in').addEventListener('click', () => {
-        radarMap.zoomIn();
-    });
-    document.getElementById('radar-zoom-out').addEventListener('click', () => {
-        radarMap.zoomOut();
-    });
-    document.getElementById('radar-reset').addEventListener('click', () => {
-        radarMap.setView([20, 0], 3);
-    });
+    const zoomIn = document.getElementById('radar-zoom-in');
+    const zoomOut = document.getElementById('radar-zoom-out');
+    const reset = document.getElementById('radar-reset');
+
+    if (zoomIn) zoomIn.addEventListener('click', () => radarMap && radarMap.zoomIn());
+    if (zoomOut) zoomOut.addEventListener('click', () => radarMap && radarMap.zoomOut());
+    if (reset) reset.addEventListener('click', () => radarMap && radarMap.setView([20, 0], 3));
 
     // Search
-    document.getElementById('radar-search-btn').addEventListener('click', searchRadarLocation);
-    document.getElementById('radar-location-input').addEventListener('keypress', (e) => {
+    const searchBtn = document.getElementById('radar-search-btn');
+    const searchInput = document.getElementById('radar-location-input');
+
+    if (searchBtn) searchBtn.addEventListener('click', searchRadarLocation);
+    if (searchInput) searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') searchRadarLocation();
     });
 
     // Geolocation
-    document.getElementById('radar-geo-btn').addEventListener('click', () => {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition((pos) => {
-                radarMap.setView([pos.coords.latitude, pos.coords.longitude], 8);
-            });
-        }
-    });
+    const geoBtn = document.getElementById('radar-geo-btn');
+    if (geoBtn) {
+        geoBtn.addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition((pos) => {
+                    if (radarMap) {
+                        radarMap.setView([pos.coords.latitude, pos.coords.longitude], 8);
+                    }
+                });
+            }
+        });
+    }
 }
 
 function setupRadarLayerToggles() {
@@ -221,13 +256,14 @@ function setupRadarLayerToggles() {
 
 async function searchRadarLocation() {
     const input = document.getElementById('radar-location-input');
+    if (!input) return;
     const city = input.value.trim();
     if (!city) return;
 
     try {
         const response = await fetch(`${BASE_URL}/weather?q=${encodeURIComponent(city)}&appid=${API_KEY}&units=metric`);
         const data = await response.json();
-        if (data.coord) {
+        if (data.coord && radarMap) {
             radarMap.setView([data.coord.lat, data.coord.lon], 8);
         }
     } catch (error) {
@@ -239,8 +275,10 @@ async function searchRadarLocation() {
 // WEATHER MAPS
 // ============================================
 function initWeatherMap() {
+    if (mapsInitialized) return;
+
     const mapContainer = document.getElementById('weather-map');
-    if (!mapContainer || weatherMap) return;
+    if (!mapContainer) return;
 
     // Initialize Leaflet map
     weatherMap = L.map('weather-map', {
@@ -261,6 +299,13 @@ function initWeatherMap() {
 
     // Setup tabs
     setupMapTabs();
+
+    mapsInitialized = true;
+
+    // Force map refresh after container becomes visible
+    setTimeout(() => {
+        weatherMap.invalidateSize();
+    }, 300);
 }
 
 function addBaseLayer(type) {
@@ -314,7 +359,8 @@ function addMapWeatherLayer(type) {
     };
 
     const owmLayer = layerMap[type] || 'temp_new';
-    const opacity = document.getElementById('overlay-opacity')?.value / 100 || 0.6;
+    const opacitySlider = document.getElementById('overlay-opacity');
+    const opacity = opacitySlider ? opacitySlider.value / 100 : 0.6;
 
     currentMapLayer = L.tileLayer(`${TILE_URL}/${owmLayer}/{z}/{x}/{y}.png?appid=${API_KEY}`, {
         attribution: '&copy; <a href="https://openweathermap.org">OpenWeatherMap</a>',
@@ -325,43 +371,58 @@ function addMapWeatherLayer(type) {
 
 function setupMapControls() {
     // Base map selector
-    document.getElementById('base-map-select').addEventListener('change', (e) => {
-        addBaseLayer(e.target.value);
-    });
+    const baseSelect = document.getElementById('base-map-select');
+    if (baseSelect) {
+        baseSelect.addEventListener('change', (e) => {
+            addBaseLayer(e.target.value);
+        });
+    }
 
     // Opacity slider
     const opacitySlider = document.getElementById('overlay-opacity');
-    opacitySlider.addEventListener('input', (e) => {
-        const value = e.target.value;
-        e.target.nextElementSibling.textContent = value + '%';
-        if (currentMapLayer) {
-            currentMapLayer.setOpacity(value / 100);
-        }
-    });
+    if (opacitySlider) {
+        opacitySlider.addEventListener('input', (e) => {
+            const value = e.target.value;
+            const rangeValue = e.target.nextElementSibling;
+            if (rangeValue) rangeValue.textContent = value + '%';
+            if (currentMapLayer) {
+                currentMapLayer.setOpacity(value / 100);
+            }
+        });
+    }
 
     // Show cities toggle
-    document.getElementById('show-cities').addEventListener('change', (e) => {
-        if (e.target.checked) {
-            addCitiesLayer();
-        } else if (citiesLayer) {
-            weatherMap.removeLayer(citiesLayer);
-            citiesLayer = null;
-        }
-    });
+    const citiesToggle = document.getElementById('show-cities');
+    if (citiesToggle) {
+        citiesToggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                addCitiesLayer();
+            } else if (citiesLayer) {
+                weatherMap.removeLayer(citiesLayer);
+                citiesLayer = null;
+            }
+        });
+    }
 
     // Show stations toggle
-    document.getElementById('show-stations').addEventListener('change', (e) => {
-        if (e.target.checked) {
-            addStationsLayer();
-        } else if (weatherStationsLayer) {
-            weatherMap.removeLayer(weatherStationsLayer);
-            weatherStationsLayer = null;
-        }
-    });
+    const stationsToggle = document.getElementById('show-stations');
+    if (stationsToggle) {
+        stationsToggle.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                addStationsLayer();
+            } else if (weatherStationsLayer) {
+                weatherMap.removeLayer(weatherStationsLayer);
+                weatherStationsLayer = null;
+            }
+        });
+    }
 
     // Search
-    document.getElementById('maps-search-btn').addEventListener('click', searchMapLocation);
-    document.getElementById('maps-location-input').addEventListener('keypress', (e) => {
+    const searchBtn = document.getElementById('maps-search-btn');
+    const searchInput = document.getElementById('maps-location-input');
+
+    if (searchBtn) searchBtn.addEventListener('click', searchMapLocation);
+    if (searchInput) searchInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') searchMapLocation();
     });
 }
@@ -380,7 +441,6 @@ function setupMapTabs() {
 function addCitiesLayer() {
     if (!weatherMap) return;
 
-    // Sample major cities with weather data
     const cities = [
         { name: 'London', lat: 51.5074, lon: -0.1278, temp: 12 },
         { name: 'New York', lat: 40.7128, lon: -74.0060, temp: 18 },
@@ -395,6 +455,10 @@ function addCitiesLayer() {
         { name: 'Lagos', lat: 6.5244, lon: 3.3792, temp: 29 },
         { name: 'Moscow', lat: 55.7558, lon: 37.6173, temp: 5 }
     ];
+
+    if (citiesLayer) {
+        weatherMap.removeLayer(citiesLayer);
+    }
 
     citiesLayer = L.layerGroup();
 
@@ -422,7 +486,6 @@ function addCitiesLayer() {
 function addStationsLayer() {
     if (!weatherMap) return;
 
-    // Sample weather station markers
     const stations = [
         { name: 'Station A', lat: 40.0, lon: -100.0 },
         { name: 'Station B', lat: 35.0, lon: -95.0 },
@@ -430,6 +493,10 @@ function addStationsLayer() {
         { name: 'Station D', lat: 30.0, lon: -85.0 },
         { name: 'Station E', lat: 50.0, lon: -110.0 }
     ];
+
+    if (weatherStationsLayer) {
+        weatherMap.removeLayer(weatherStationsLayer);
+    }
 
     weatherStationsLayer = L.layerGroup();
 
@@ -463,13 +530,14 @@ function getTempColor(temp) {
 
 async function searchMapLocation() {
     const input = document.getElementById('maps-location-input');
+    if (!input) return;
     const query = input.value.trim();
     if (!query) return;
 
     // Try to parse as coordinates
     const coords = query.split(',').map(c => parseFloat(c.trim()));
     if (coords.length === 2 && !isNaN(coords[0]) && !isNaN(coords[1])) {
-        weatherMap.setView([coords[0], coords[1]], 8);
+        if (weatherMap) weatherMap.setView([coords[0], coords[1]], 8);
         return;
     }
 
@@ -477,7 +545,7 @@ async function searchMapLocation() {
     try {
         const response = await fetch(`${BASE_URL}/weather?q=${encodeURIComponent(query)}&appid=${API_KEY}&units=metric`);
         const data = await response.json();
-        if (data.coord) {
+        if (data.coord && weatherMap) {
             weatherMap.setView([data.coord.lat, data.coord.lon], 8);
         }
     } catch (error) {
@@ -902,14 +970,16 @@ let touchEndX = 0;
 
 const slideshowContainer = document.querySelector('.slideshow-container');
 
-slideshowContainer.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-}, { passive: true });
+if (slideshowContainer) {
+    slideshowContainer.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
 
-slideshowContainer.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-}, { passive: true });
+    slideshowContainer.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    }, { passive: true });
+}
 
 function handleSwipe() {
     const swipeThreshold = 50;

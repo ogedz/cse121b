@@ -1,9 +1,7 @@
 /* ============================================
-   ATMOSPHERE WEATHER APP - ADVANCED STYLES
-   WITH RADAR & MAPS
+   ATMOSPHERE WEATHER APP - CLEAN CSS
    ============================================ */
 
-/* CSS Variables for theming */
 :root {
     --primary: #3b82f6;
     --primary-dark: #2563eb;
@@ -42,7 +40,6 @@
     --transition-slow: 0.5s ease;
 }
 
-/* Light theme variables */
 [data-theme="light"] {
     --bg-primary: #f8fafc;
     --bg-secondary: #ffffff;
@@ -55,7 +52,6 @@
     --border-color: rgba(148, 163, 184, 0.2);
 }
 
-/* Reset and Base */
 *,
 *::before,
 *::after {
@@ -78,7 +74,6 @@ body {
     transition: background var(--transition-normal), color var(--transition-normal);
 }
 
-/* Background Overlay */
 .bg-overlay {
     position: fixed;
     top: 0;
@@ -92,7 +87,6 @@ body {
     z-index: -1;
 }
 
-/* Glassmorphism Utility */
 .glass {
     background: var(--bg-glass);
     backdrop-filter: blur(20px) saturate(180%);
@@ -101,7 +95,6 @@ body {
     border-radius: var(--radius-lg);
 }
 
-/* Container */
 .container {
     max-width: 1280px;
     margin: 0 auto;
@@ -167,6 +160,7 @@ body {
     border-radius: var(--radius-sm);
     transition: all var(--transition-fast);
     position: relative;
+    cursor: pointer;
 }
 
 .nav-links a:hover {
@@ -223,15 +217,21 @@ body {
 }
 
 /* ============================================
-   PAGE SECTIONS (Tab System)
+   CRITICAL: PAGE SECTIONS HIDING
    ============================================ */
 .page-section {
     display: none;
-    animation: fadeIn 0.4s ease;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .page-section.active {
     display: block;
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    animation: fadeIn 0.4s ease;
 }
 
 @keyframes fadeIn {
@@ -246,7 +246,9 @@ body {
     }
 }
 
-/* Section Headers */
+/* ============================================
+   SECTION HEADERS
+   ============================================ */
 .section-header {
     margin-top: 72px;
     padding: 48px 0 32px;
@@ -1179,6 +1181,7 @@ body {
     font-family: inherit;
     font-size: 0.9rem;
     text-align: left;
+    width: 100%;
 }
 
 .layer-btn i {
@@ -1191,6 +1194,7 @@ body {
     border-radius: var(--radius-sm);
     font-size: 0.9rem;
     transition: all var(--transition-fast);
+    flex-shrink: 0;
 }
 
 .layer-btn:hover {
@@ -1251,6 +1255,7 @@ body {
     justify-content: center;
     transition: all var(--transition-fast);
     font-size: 0.9rem;
+    flex-shrink: 0;
 }
 
 .search-btn-small {
@@ -1409,6 +1414,7 @@ body {
     font-family: inherit;
     font-size: 0.9rem;
     text-align: left;
+    width: 100%;
 }
 
 .maps-tab i {
@@ -1421,6 +1427,7 @@ body {
     border-radius: var(--radius-sm);
     font-size: 0.9rem;
     transition: all var(--transition-fast);
+    flex-shrink: 0;
 }
 
 .maps-tab:hover {
@@ -1588,6 +1595,7 @@ body {
     align-items: center;
     justify-content: center;
     transition: all var(--transition-fast);
+    flex-shrink: 0;
 }
 
 .maps-search-form button:hover {
@@ -1976,16 +1984,6 @@ body {
     }
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-    }
-
-    to {
-        opacity: 1;
-    }
-}
-
 .weather-dashboard>* {
     animation: fadeInUp 0.6s ease forwards;
 }
@@ -2006,12 +2004,10 @@ body {
     animation-delay: 0.4s;
 }
 
-/* Utility Classes */
 .hidden {
-    display: none !important;
+    display: none;
 }
 
-/* Scrollbar Styling */
 ::-webkit-scrollbar {
     width: 8px;
     height: 8px;
